@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         protected List<ForecastPrediction> doInBackground(String... params) {//this is a forced to implement method because it extends AsyncTask
             List <ForecastPrediction> list = new ArrayList<>();
             URL url = null;
+
             try {
                 url = new URL("https://george-vustrey-weather.p.mashape.com/api.php?location="+params[0]);
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
@@ -135,16 +137,14 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "API returned "+apiString);
 
                 JSONObject myJsonObject = new JSONObject(apiString);
-
-                JSONArray myArray =  myJsonObject.getJSONArray("definitions");
+                String[] apiStringSplit = apiString.split(",");
+                JSONArray myArray =  myJsonObject.getJSONArray("day_of_week");
                 JSONObject item;
-                for (int i = 0 ; i <myArray.length(); i++) {
 
 
-                    item = myArray.getJSONObject(i);
-
+                    item = myArray.getJSONObject(0  );
+//now it works
                     list.add(new ForecastPrediction(item.getString("condition"), item.getString("day_of_week"),item.getString("high"), item.getString("low")));
-                                    }
 
 
                 return list;
